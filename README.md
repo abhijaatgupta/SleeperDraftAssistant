@@ -2,7 +2,7 @@
 
 A local-first Chrome extension that combines a model-generated fantasy football draft board with live Sleeper draft data.
 
-## Phase 8 status
+## Current status
 
 The project currently includes:
 
@@ -44,8 +44,6 @@ The project currently includes:
 - Remaining-pool wait, draft-now, and trade-up guidance based on upcoming owned picks
 - A live lineup card with natural-position-first flex allocation, expandable bench space, and keepers
 - Expandable connection diagnostics with sync, retry, and page-marker details
-
-Connection diagnostics and remaining hardening continue in Phase 8.
 
 ## Requirements
 
