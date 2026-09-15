@@ -79,6 +79,11 @@ first 25 rows and requires these columns (recognized aliases are also supported)
 - `Player`
 - At least one of `Model Pos Rank`, `User Pos Rank`, or `Expected Overall ADP`
 
+The repository includes a ready-to-import
+[example draft board](examples/2026_Draft_Board_Example.xlsx) with `Player`, `Targets`,
+`User Pos Rank`, and `Projected Pos SOS`. It can be imported directly or copied and edited to create
+a personal board.
+
 An optional `Targets` column treats any non-empty cell as a target marker; the marker text itself
 does not matter. Empty or whitespace-only cells are non-targets. `target` and `isTarget` are
 recognized header aliases. If the column is absent, all players are imported as non-targets and a
@@ -214,7 +219,9 @@ Run the fast, non-browser regression checks during development with:
 ```
 
 This runs formatting verification, linting, TypeScript checking, and unit tests. It does not
-produce a new extension build. End-to-end browser tests are intentionally excluded.
+produce a new extension build. The committed example workbook is imported during every regression
+run, so clean clones exercise the real XLSX path. End-to-end browser tests are intentionally
+excluded.
 
 Use [the manual end-to-end checklist](docs/MANUAL_E2E_CHECKLIST.md) for the project-owner validation
 that follows a verified build.

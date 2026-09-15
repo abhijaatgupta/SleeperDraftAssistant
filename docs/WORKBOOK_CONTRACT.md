@@ -1,6 +1,8 @@
 # Workbook contract
 
 The extension will import the `Draft Board` worksheet without depending on a fixed column order.
+The repository's [example draft board](../examples/2026_Draft_Board_Example.xlsx) is a complete,
+ready-to-import illustration of the minimal four-column format.
 
 ## Required columns
 

@@ -1,5 +1,5 @@
 import { readFile } from "node:fs/promises";
-import { basename } from "node:path";
+import { basename, resolve } from "node:path";
 import * as XLSX from "xlsx";
 import { describe, expect, it } from "vitest";
 import { normalizeHeader } from "../../src/import/board-schema";
@@ -11,10 +11,10 @@ import type { BoardPosition, ImportedPlayer } from "../../src/types/board";
 import { SLEEPER_CATALOG_ID, type SleeperPlayerCatalog } from "../../src/types/sleeper";
 
 const genericFixturePath = process.env.DRAFT_BOARD_FIXTURE;
-const reducedFixturePath = process.env.DRAFT_BOARD_REDUCED_FIXTURE;
+const publicFixturePath = resolve(process.cwd(), "examples/2026_Draft_Board_Example.xlsx");
 const fullFixturePath = process.env.DRAFT_BOARD_FULL_FIXTURE;
 const runGenericFixtureTest = genericFixturePath ? it : it.skip;
-const runPairedFixtureTest = reducedFixturePath && fullFixturePath ? it : it.skip;
+const runPrivateFixtureTest = fullFixturePath ? it : it.skip;
 
 describe("real draft-board workbook", () => {
   runGenericFixtureTest(
@@ -31,36 +31,38 @@ describe("real draft-board workbook", () => {
     },
   );
 
-  runPairedFixtureTest(
-    "imports the reduced workbook using Player and User Pos Rank only",
-    async () => {
-      const imported = await importFixture(reducedFixturePath!);
+  it("imports the public example workbook using its four supported columns", async () => {
+    const imported = await importFixture(publicFixturePath);
 
-      expect(imported.board.metadata).toMatchObject({
-        playerCount: 252,
-        targetCount: 0,
-        rankingLabel: "User",
-      });
-      expect(
-        imported.board.players.every((player) => player.sourcePositionProvided === false),
-      ).toBe(true);
-      expect(imported.board.players.every((player) => player.team === "")).toBe(true);
-      expect(
-        imported.board.players.every(
-          (player) =>
-            player.modelPositionRankProvided === true && player.modelOverallAdpProvided === false,
-        ),
-      ).toBe(true);
-      expect(imported.board.players.find((player) => player.name === "Jahmyr Gibbs")).toMatchObject(
-        {
-          modelPositionRank: 1,
-        },
-      );
-      expect(imported.warnings).toEqual([]);
-    },
-  );
+    expect(imported.board.metadata).toMatchObject({
+      playerCount: 252,
+      targetCount: 49,
+      rankingLabel: "User",
+    });
+    expect(imported.board.players.every((player) => player.sourcePositionProvided === false)).toBe(
+      true,
+    );
+    expect(imported.board.players.every((player) => player.team === "")).toBe(true);
+    expect(
+      imported.board.players.every(
+        (player) =>
+          player.modelPositionRankProvided === true && player.modelOverallAdpProvided === false,
+      ),
+    ).toBe(true);
+    expect(
+      imported.board.players.every(
+        (player) =>
+          Number.isFinite(player.projectedPositionSos) && player.projectedPositionSos! > 0,
+      ),
+    ).toBe(true);
+    expect(imported.board.players.find((player) => player.name === "Jahmyr Gibbs")).toMatchObject({
+      modelPositionRank: 1,
+      isTarget: true,
+    });
+    expect(imported.warnings).toEqual([]);
+  });
 
-  runPairedFixtureTest("imports v33 while ignoring its legacy Sleeper ADP columns", async () => {
+  runPrivateFixtureTest("imports v33 while ignoring its legacy Sleeper ADP columns", async () => {
     const imported = await importFixture(fullFixturePath!);
     const rawRows = await readFullFixtureRows(fullFixturePath!);
     const staleRow = rawRows.find(
@@ -88,11 +90,11 @@ describe("real draft-board workbook", () => {
     );
   });
 
-  runPairedFixtureTest(
-    "hydrates and derives the reduced workbook offline from v33 player and ADP data",
+  runPrivateFixtureTest(
+    "hydrates and derives the public workbook offline from v33 player and ADP data",
     async () => {
       const [reduced, full, rawRows] = await Promise.all([
-        importFixture(reducedFixturePath!),
+        importFixture(publicFixturePath),
         importFixture(fullFixturePath!),
         readFullFixtureRows(fullFixturePath!),
       ]);
