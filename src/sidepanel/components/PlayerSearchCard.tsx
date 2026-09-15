@@ -255,8 +255,8 @@ function SelectedPlayerCard({
         <div>
           <dt>Sleeper value</dt>
           <dd>
-            {timing?.sleeperExpectedPick !== null && timing?.sleeperExpectedPick !== undefined
-              ? `Pick ${formatNumber(timing.sleeperExpectedPick)}`
+            {timing?.sleeperValuePick !== undefined
+              ? `Pick ${formatNumber(timing.sleeperValuePick)}`
               : `ADP ${formatNumber(player.sleeperOverallAdp)}`}
           </dd>
         </div>

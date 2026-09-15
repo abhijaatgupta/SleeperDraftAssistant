@@ -38,7 +38,7 @@ describe("PlayerSearchCard", () => {
     expect(within(selection as HTMLElement).getByText("Justin Jefferson")).toBeInTheDocument();
     expect(within(selection as HTMLElement).getByText("Available")).toBeInTheDocument();
     expect(within(selection as HTMLElement).getByText("Target")).toBeInTheDocument();
-    expect(within(selection as HTMLElement).getByText("Pick 3")).toBeInTheDocument();
+    expect(within(selection as HTMLElement).getByText("Pick 5")).toBeInTheDocument();
     expect(
       within(selection as HTMLElement).getByText("Model: 2 draft spots early"),
     ).toBeInTheDocument();

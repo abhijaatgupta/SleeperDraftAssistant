@@ -94,13 +94,7 @@ export function RecommendationsPanel({ board, snapshot }: RecommendationsPanelPr
               {selectedGroup.players.length > 0 ? (
                 <ol className="recommendation-list">
                   {selectedGroup.players.map(
-                    ({
-                      player,
-                      sleeperExpectedPick,
-                      positionTiming,
-                      modelTiming,
-                      sleeperTiming,
-                    }) => (
+                    ({ player, sleeperValuePick, positionTiming, modelTiming, sleeperTiming }) => (
                       <li key={player.boardPlayerId} className="recommendation-player">
                         <div className="recommendation-player-heading">
                           <div>
@@ -119,7 +113,7 @@ export function RecommendationsPanel({ board, snapshot }: RecommendationsPanelPr
                           </div>
                           <div>
                             <dt>Sleeper value</dt>
-                            <dd>{formatPick(sleeperExpectedPick)}</dd>
+                            <dd>{formatPick(sleeperValuePick)}</dd>
                           </div>
                           <div>
                             <dt>Positional value</dt>

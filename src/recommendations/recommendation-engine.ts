@@ -10,6 +10,7 @@ export interface PickTiming {
 
 export interface PlayerRecommendation {
   player: ImportedPlayer;
+  sleeperValuePick: number;
   sleeperExpectedPick: number | null;
   countedAtPosition: number;
   positionTiming: PickTiming;
@@ -18,6 +19,7 @@ export interface PlayerRecommendation {
 }
 
 export interface RemainingPoolTiming {
+  sleeperValuePick: number;
   sleeperExpectedPick: number | null;
   countedAtPosition: number;
   countedOverall: number;
@@ -64,6 +66,7 @@ export function buildPositionRecommendations(
         const timing = remainingPoolTimings.get(player.boardPlayerId);
         return {
           player,
+          sleeperValuePick: timing?.sleeperValuePick ?? getSleeperOverallRank(player),
           sleeperExpectedPick: timing?.sleeperExpectedPick ?? null,
           countedAtPosition: timing?.countedAtPosition ?? 0,
           positionTiming:
@@ -137,6 +140,7 @@ export function buildRemainingPoolTimings(
       return [
         player.boardPlayerId,
         {
+          sleeperValuePick: keeperAdjustedSleeperRank,
           sleeperExpectedPick,
           countedAtPosition,
           countedOverall,

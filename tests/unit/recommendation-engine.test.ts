@@ -108,10 +108,12 @@ describe("buildPositionRecommendations", () => {
     );
 
     expect(timings.get("RB:Jahmyr Gibbs")).toMatchObject({
+      sleeperValuePick: 1,
       sleeperExpectedPick: 4,
       sleeperTiming: { kind: "discount", picks: 3, basis: "overall" },
     });
     expect(timings.get("RB:Jonathan Taylor")).toMatchObject({
+      sleeperValuePick: 4,
       sleeperExpectedPick: 5,
       sleeperTiming: { kind: "value", picks: 0, basis: "overall" },
     });

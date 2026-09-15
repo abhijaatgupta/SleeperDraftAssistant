@@ -27,7 +27,7 @@ describe("RecommendationsPanel", () => {
     expect(runningBack.getByText("Available Runner")).toBeInTheDocument();
     expect(runningBack.queryByText("Drafted Runner")).not.toBeInTheDocument();
     expect(runningBack.getByText("RB2")).toBeInTheDocument();
-    expect(runningBack.getByText("Pick 15")).toBeInTheDocument();
+    expect(runningBack.getByText("Pick 20")).toBeInTheDocument();
     expect(runningBack.getByText("Positional value")).toBeInTheDocument();
     expect(runningBack.getByText("At value")).toBeInTheDocument();
     expect(runningBack.getByText("7/32")).toBeInTheDocument();
@@ -137,6 +137,23 @@ describe("RecommendationsPanel", () => {
     const card = within(screen.getByRole("listitem"));
     expect(card.getByText("Christian McCaffrey")).toBeInTheDocument();
     expect(card.getByText("Model: at value")).toBeInTheDocument();
+  });
+
+  it("shows the keeper-adjusted Sleeper market pick instead of the live remaining-pool slot", () => {
+    const gibbs = {
+      ...makePlayer("Jahmyr Gibbs", "gibbs", 1),
+      sleeperOverallAdp: 1.5,
+      sleeperOverallRank: 1,
+    };
+    const snapshot = makeSnapshot(["puka", "bijan", "cook"], 4);
+
+    render(<RecommendationsPanel board={makeBoard([gibbs])} snapshot={snapshot} />);
+    fireEvent.click(screen.getByRole("tab", { name: "RB" }));
+
+    const card = within(screen.getByRole("listitem"));
+    expect(card.getByText("Pick 1")).toBeInTheDocument();
+    expect(card.getByText("Sleeper: 3 draft spots of value")).toBeInTheDocument();
+    expect(card.queryByText("Pick 4")).not.toBeInTheDocument();
   });
 });
 

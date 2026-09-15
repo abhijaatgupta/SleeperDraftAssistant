@@ -1,6 +1,6 @@
-# Sleeper Draft Assistant
+# Sleeper Draft Assistant technical specification
 
-## Project overview
+## Overview
 
 Sleeper Draft Assistant is a local-first Chrome extension for making faster, more informed decisions during Sleeper fantasy football drafts and mock drafts. It combines a user's custom player rankings with live Sleeper draft data and presents the result beside the active draft in a persistent Chrome side panel.
 
@@ -123,7 +123,7 @@ The user can display the best 3, 5, or 8 available players at the selected posit
 Each player card can show:
 
 - Model or User overall ADP
-- Sleeper's dynamic expected pick
+- Sleeper's keeper-adjusted market value pick
 - Model or User positional rank
 - Positional value
 - Optional positional strength of schedule
@@ -134,19 +134,17 @@ Drafted players and keeper-assigned players are removed automatically.
 
 ### Draft-value calculations
 
-The extension distinguishes between two concepts that initially appeared similar.
+The extension distinguishes between two related calculations.
 
-#### Dynamic Sleeper expected pick
+#### Sleeper market value
 
-The displayed `Sleeper value: Pick X` answers when the player is likely to be selected from the current remaining pool. It starts at the current pick and counts how many available players are ranked ahead by Sleeper.
+The displayed `Sleeper value: Pick X` is the player's original overall Sleeper rank, adjusted only for future keepers ranked ahead of that player. The adjacent `Sleeper: ...` badge compares the current pick against that same value, so the number and badge always describe a single market baseline.
 
-This value changes when players are drafted. If another manager reaches, a higher-ranked player remains available and later players move one selection later in the dynamic queue.
+This preserves value created by reaches. For example, if Sleeper's top-ranked player remains available at Pick 4, the card shows `Sleeper value: Pick 1` and `Sleeper: 3 draft spots of value`.
 
-#### Sleeper value badge
+#### Dynamic availability estimate
 
-The `Sleeper: ...` badge answers whether the player represents market value at the current draft position. It compares the current selection with the player's original overall Sleeper rank, adjusted for future keepers ranked ahead of that player.
-
-This preserves value created by reaches. For example, if Sleeper's top-ranked player remains available at Pick 4, the extension reports three draft spots of value instead of resetting that player to `Sleeper: at value` merely because they are first in the remaining pool.
+Target risk, deferral, and trade-up guidance separately estimate when a player is likely to leave the current remaining pool. That internal estimate starts at the current pick and counts available players ranked ahead by Sleeper; it is not presented as the player's market value.
 
 #### Model or User value
 
@@ -284,7 +282,8 @@ The project is a fully client-side Chrome Extension using Manifest V3.
 - jest-dom
 - jsdom
 - fake-indexeddb
-- Real-workbook contract tests using the reduced-field and v33 draft boards when available locally
+- Real-workbook contract tests using the committed public example board, with deeper v33 comparison
+  coverage when the private source workbook is available locally
 
 `./run_all_regression` runs formatting verification, linting, TypeScript checks, unit tests, component tests, storage tests, and workbook-contract tests without producing a build.
 

@@ -108,7 +108,7 @@ export function PersonalTargetsPanel({
               {targets.players.map(
                 ({
                   player,
-                  sleeperExpectedPick,
+                  sleeperValuePick,
                   positionTiming,
                   modelTiming,
                   sleeperTiming,
@@ -132,7 +132,7 @@ export function PersonalTargetsPanel({
                       </div>
                       <div>
                         <dt>Sleeper value</dt>
-                        <dd>{formatPick(sleeperExpectedPick)}</dd>
+                        <dd>{formatPick(sleeperValuePick)}</dd>
                       </div>
                       <div>
                         <dt>Positional value</dt>

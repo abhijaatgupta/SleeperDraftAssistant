@@ -19,6 +19,7 @@ export interface TargetAction {
 
 export interface TargetRecommendation {
   player: ImportedPlayer;
+  sleeperValuePick: number;
   sleeperExpectedPick: number | null;
   countedAtPosition: number;
   positionTiming: PickTiming;
@@ -57,6 +58,7 @@ export function buildTargetRecommendations(
       const timing = remainingPoolTimings.get(player.boardPlayerId);
       return {
         player,
+        sleeperValuePick: timing?.sleeperValuePick ?? getSleeperOverallRank(player),
         sleeperExpectedPick: timing?.sleeperExpectedPick ?? null,
         countedAtPosition: timing?.countedAtPosition ?? 0,
         positionTiming:
@@ -85,6 +87,10 @@ export function buildTargetRecommendations(
     availableCount: available.length,
     players: recommendations.slice(0, Math.max(0, limit)),
   };
+}
+
+function getSleeperOverallRank(player: ImportedPlayer): number {
+  return player.sleeperOverallRank ?? player.sleeperOverallAdp;
 }
 
 function findFourthUpcomingOwnedPick(
