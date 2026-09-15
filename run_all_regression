@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$repo_dir"
+
+fixture_dir="$(dirname "$repo_dir")/underrated-player-predictor/outputs/i-x20"
+reduced_fixture="$fixture_dir/2026_Draft_Board_test_less_fields.xlsx"
+full_fixture="$fixture_dir/2026_Draft_Board_Full_v33.xlsx"
+
+if [[ -f "$reduced_fixture" && -f "$full_fixture" ]]; then
+  export DRAFT_BOARD_REDUCED_FIXTURE="$reduced_fixture"
+  export DRAFT_BOARD_FULL_FIXTURE="$full_fixture"
+fi
+
+pnpm run regression

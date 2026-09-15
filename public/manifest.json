@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "Sleeper Draft Assistant",
+  "description": "Model-driven draft planning alongside Sleeper drafts and mock drafts.",
+  "version": "0.1.0",
+  "minimum_chrome_version": "114",
+  "permissions": ["activeTab", "sidePanel", "storage"],
+  "host_permissions": ["https://api.sleeper.app/*"],
+  "background": {
+    "service_worker": "background/service-worker.js"
+  },
+  "action": {
+    "default_title": "Open Sleeper Draft Assistant"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://sleeper.com/*",
+        "https://*.sleeper.com/*",
+        "https://sleeper.app/*",
+        "https://*.sleeper.app/*"
+      ],
+      "exclude_matches": ["https://api.sleeper.app/*"],
+      "js": ["content/sleeper-draft-page.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
